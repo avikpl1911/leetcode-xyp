@@ -1,9 +1,8 @@
 import express, { NextFunction, Response } from 'express';
 import cors from 'cors';
-import rateLimit from 'express-rate-limit';
 import * as leetcode from './leetCode';
 import { FetchUserDataRequest } from './types';
-import apicache from 'apicache';
+// import apicache from 'apicache';
 import axios from 'axios';
 import {
   userContestRankingInfoQuery,
@@ -18,20 +17,20 @@ import {
 } from './GQLQueries/newQueries';
 
 const app = express();
-let cache = apicache.middleware;
+// let cache = apicache.middleware;
 const API_URL = process.env.LEETCODE_API_URL || 'https://leetcode.com/graphql';
 
-const limiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  limit: 60,
-  standardHeaders: 'draft-7',
-  legacyHeaders: false,
-  message: 'Too many request from this IP, try again in 1 hour',
-});
+// const limiter = rateLimit({
+//   windowMs: 60 * 60 * 1000, // 1 hour
+//   limit: 60,
+//   standardHeaders: 'draft-7',
+//   legacyHeaders: false,
+//   message: 'Too many request from this IP, try again in 1 hour',
+// });
 
-app.use(cache('5 minutes'));
+// app.use(cache('5 minutes'));
 app.use(cors()); //enable all CORS request
-app.use(limiter); //limit to all API
+// app.use(limiter); //limit to all API
 app.use((req: express.Request, _res: Response, next: NextFunction) => {
   console.log('Requested URL:', req.originalUrl);
   next();
@@ -161,6 +160,8 @@ const formatData = (data: any) => {
 };
 app.post('/submit/:id',leetcode.checkSubmit)
 app.post('/submitques/:slug',leetcode.submitCode)
+app.post('/run/:slug',leetcode.run)
+app.post('/runcheck/:id',leetcode.runCheck)
 app.get('/userProfile/:id', async (req, res) => {
   const user = req.params.id;
 

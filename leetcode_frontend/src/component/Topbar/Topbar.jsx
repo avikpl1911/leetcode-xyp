@@ -9,7 +9,7 @@ import Timer from "../Timer/Timer";
 
 
 
-const Topbar = ({ problemPage }) => {
+const Topbar = ({ problemPage,signref ,token}) => {
 	
 	//const router = useRouter();
     var user = null
@@ -65,13 +65,12 @@ const Topbar = ({ problemPage }) => {
 							Premium
 						</a>
 					</div>
-					{!user && (
-						<Link
-							to='#'
-							onClick={() => {}}
-						>
-							<button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded ' style={{padding:"5px",marginRight:"10px" }}>Sign In</button>
-						</Link>
+					{!(token.length>0) && localStorage.getItem("session")==null && (
+						
+							<button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded ' style={{padding:"5px",marginRight:"10px" }}
+							onClick={()=>{signref.current.showModal()}}
+							>Sign In</button>
+						
 					)}
 					{true && problemPage && <Timer />}
 					{/* user */}

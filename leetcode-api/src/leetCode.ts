@@ -146,8 +146,11 @@ export const trendingCategoryTopics = (_req: Request, res: Response) => {
       example: 'localhost:3000/trendingDiscuss?first=20',
     });
   }
- 
+
 };
+
+
+
 
 export const languageStats = (_req: Request, res: Response) => {
   const username = _req.query.username as string;
@@ -165,19 +168,18 @@ export const languageStats = (_req: Request, res: Response) => {
       example: 'localhost:3000/languageStats?username=uwi',
     });
   }
- 
+
 };
 
 
-export const checkSubmit = async (_req : Request , res : Response)=>{
-  console.log(_req.body)
-   const id = _req.params.id;
-   const csrf = _req.body.csrf;
-   const session = _req.body.session
-   if(id && csrf && session){
-    const resp = await controllers.sendHttpGetJson(`https://leetcode.com/submissions/detail/${id}/check/`,{ Referer:"https://leetcode.com/",Cookie:`csrftoken=${csrf}; LEETCODE_SESSION=${session}`})
+export const checkSubmit = async (_req: Request, res: Response) => {
+  const id = _req.params.id;
+  const csrf = _req.body.csrf;
+  const session = _req.body.session
+  if (id && csrf && session) {
+    const resp = await controllers.sendHttpGetJson(`https://leetcode.com/submissions/detail/${id}/check/`, { Referer: "https://leetcode.com/", Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
     res.json(resp)
-   }else {
+  } else {
     res.status(400).json({
       error: 'Missing or invalid query parameters',
       solution: 'put csrf, loginsession & submisson id',
@@ -185,21 +187,58 @@ export const checkSubmit = async (_req : Request , res : Response)=>{
   }
 }
 
-export const submitCode = async (_req: Request , res: Response)=>{
+export const submitCode = async (_req: Request, res: Response) => {
   const slug = _req.params.slug
-  const question_id =  _req.body.question_id;
+  const question_id = _req.body.question_id;
   const csrf = _req.body.csrf;
   const session = _req.body.session;
   const typed_code = _req.body.typed_code;
   const lang = _req.body.lang;
-  if(question_id && csrf && session && typed_code && lang){
-    const resp = await controllers.SendPostHttp(`https://leetcode.com/problems/${slug}/submit/`,{lang,question_id,typed_code},{ "x-csrftoken":csrf,Referer:`https://leetcode.com/problems/${slug}/description/`,Cookie:`csrftoken=${csrf}; LEETCODE_SESSION=${session}`})
+  if (question_id && csrf && session && typed_code && lang) {
+    const resp = await controllers.SendPostHttp(`https://leetcode.com/problems/${slug}/submit/`, { lang, question_id, typed_code }, { "x-csrftoken": csrf, Referer: `https://leetcode.com/problems/${slug}/description/`, Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
     res.json(resp)
-  }else{
+  } else {
     res.status(400).json({
       error: 'Missing or invalid query parameters',
       solution: 'put csrf, loginsession & submisson id',
     });
   }
 
+}
+
+export const run = async (_req: Request, res: Response) => {
+  const data_input = _req.body.data_input
+  console.log(data_input)
+  const slug = _req.params.slug
+  const question_id = _req.body.question_id;
+  const csrf = _req.body.csrf;
+  const session = _req.body.session;
+  const typed_code = _req.body.typed_code;
+  const lang = _req.body.lang;
+  if (question_id && csrf && session && typed_code && lang) {
+    const resp = await controllers.SendPostHttp(`https://leetcode.com/problems/${slug}/interpret_solution/`, { data_input ,lang, question_id, typed_code }, { "x-csrftoken": csrf, Referer: `https://leetcode.com/problems/${slug}/description/`, Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
+    res.json(resp)
+  } else {
+    res.status(400).json({
+      error: 'Missing or invalid query parameters',
+      solution: 'put csrf, loginsession & submisson id',
+    });
+  }
+}
+
+export const runCheck = async (_req: Request, res: Response) => {
+  const id = _req.params.id;
+  const csrf = _req.body.csrf;
+  const session = _req.body.session
+  if (id && csrf && session) {
+    const resp = await 
+    controllers.sendHttpGetJson(`
+https://leetcode.com/submissions/detail/${id}/check/`, { Referer: "https://leetcode.com/", Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
+    res.json(resp)
+  } else {
+    res.status(400).json({
+      error: 'Missing or invalid query parameters',
+      solution: 'put csrf, loginsession & submisson id',
+    });
+  }
 }

@@ -24,14 +24,16 @@ import axios from "axios";
 const Playground = ({ problem, setSuccess, tcase }) => {
 	const [activeTestCaseId, setActiveTestCaseId] = useState(0);
 	const [Lang,setLang] = useState(localStorage.getItem("codeLang")?localStorage.getItem("codeLang"):"javascript")
-
+    const {slug} = useParams()
 	const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
-
+    const [lod , setLod] = useState(false)
 	const [settings, setSettings] = useState({
 		fontSize: fontSize,
 		settingsModalIsOpen: false,
 		dropdownIsOpen: false,
 	});
+
+	const [runData,setRunData] = useState({})
 
 	const [code,setCode] = useState("")
 
@@ -46,9 +48,38 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 	const handleSubmit = async () => {
 		
 	};
-
+    const recurRunCheck = async (id)=>{
+        const resp = await axios.post(`http://localhost:3000/runcheck/${id}`,{
+			"csrf": sessionStorage.getItem("csrf"),
+			"session": localStorage.getItem("session"),		
+		  }) 
+    
+		  console.log(JSON.parse(resp.data))
+		  if(resp.status==200 && JSON.parse(resp.data).state !== "SUCCESS"){
+			recurRunCheck(id)
+		  }else{
+			setLod(false)
+			console.log(JSON.parse(resp.data).compare_result[0]=="1")
+			setRunData(JSON.parse(resp.data))
+		  }
+	}
 	const handleRun = async ()=>{
-       const resp = await axios.post("https://localhost:3000")
+	   if(localStorage.getItem("session")){
+		setLod(true)
+		const resp = await axios.post(`http://localhost:3000/run/${slug}`,{
+			"csrf": sessionStorage.getItem("csrf"),
+			"session": localStorage.getItem("session"),
+			"data_input":problem.exampleTestcases,			
+			"lang": Lang,
+			"question_id": problem.questionId,
+			"typed_code": code,
+		  })
+		console.log(JSON.parse(resp.data)["interpret_id"])
+        recurRunCheck(JSON.parse(resp.data)["interpret_id"])
+	   }else{
+		alert("please login to submit or run code")
+	   }
+       
 	}
 
 	const handleLangChange = (e)=>{
@@ -128,8 +159,24 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 							<hr className='absolute bottom-0 h-0.5 w-full rounded-full border-none bg-white' />
 							
 						</div>
-						<CircleLoader/>
+						{lod && <CircleLoader/>}
 					</div>
+                    {runData.correct_answer != null && 
+					<div className="flex flex-row">
+					{runData.correct_answer ? <p  style={{paddingLeft:"10px",paddingTop:"10px",fontSize:"30px",color:"green"}}>Accepted</p> : 
+					
+					
+					<p  style={{paddingLeft:"10px",paddingTop:"10px",fontSize:"30px",color:"red"}}>Wrong Answer</p>}
+					
+					
+					
+					
+					<p className="" style={{paddingLeft:"15px",paddingTop:"27px",fontSize:"15px"}}>Runtime: {runData.display_runtime} ms</p>
+					
+					</div>
+					}
+                    
+
 
 					<div className='flex'>
 						{tcase.map((example, index) => (
@@ -144,7 +191,10 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 										${activeTestCaseId === index ? "text-white" : "text-gray-500"}
 									`}
 									style={{marginLeft:"10px",marginTop:"10px",padding:"7px"}}
-									>
+									> 
+									    
+									    {runData.compare_result && <div className="bg-red" style={{height:"4px",width:"4px",backgroundColor:runData.compare_result[index]=="1"?"green":"red",borderRadius:"100%",marginRight:"3px"}}></div>}
+										
 										Case {index + 1}
 									</div>
 								</div>
@@ -173,12 +223,22 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 						)}
 						
 						
-						
-						
-						<p className='text-sm font-medium mt-4 text-white' style={{paddingTop:"7px",paddingBottom:"5px",paddingLeft:"20px"}}>Output:</p>
+						{runData.code_answer && runData.code_answer[activeTestCaseId] && (<>
+							<p className='text-sm font-medium mt-4 text-white' style={{paddingTop:"7px",paddingBottom:"5px",paddingLeft:"20px"}}>Code Output:</p>
 						<div className='cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2 ' style={{padding:"7px",marginLeft:"20px"}}>
-							{"hello"}
+							{runData.code_answer[activeTestCaseId]}
 						</div>
+						</>) }
+						
+						
+                        
+                        {runData.expected_code_answer && runData.expected_code_answer[activeTestCaseId] && (<>
+							<p className='text-sm font-medium mt-4 text-white' style={{paddingTop:"7px",paddingBottom:"5px",paddingLeft:"20px"}}>Expected Code Output:</p>
+						<div className='cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2 ' style={{padding:"7px",marginLeft:"20px"}}>
+							{runData.expected_code_answer[activeTestCaseId]}
+						</div>
+						</>) }
+						
 						
 					</div>
 				</div>

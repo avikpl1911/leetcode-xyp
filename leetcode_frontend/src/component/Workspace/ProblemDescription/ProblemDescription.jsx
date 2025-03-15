@@ -77,7 +77,7 @@ const ProblemDescription = ({ problem}) => {
 
 						{/* Problem Statement(paragraphs) */}
 						<div className='text-white text-sm'>
-							<div dangerouslySetInnerHTML={{ __html: problem.content }} />
+							<div dangerouslySetInnerHTML={{ __html: problem.content.replaceAll("https","https://asdas-beta.vercel.app/?destination=https") }} />
 						</div>
 
 						{/* Examples */}

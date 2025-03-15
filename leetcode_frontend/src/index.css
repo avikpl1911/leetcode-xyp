@@ -96,6 +96,18 @@ code {
   
 }
 
+pre{
+	padding-top: 10px;
+	padding-left: 20px;
+	border-left: 1px solid #eeefef;
+	border-radius: 2px;
+	margin-top: 10px;
+}
+
+img{
+	margin-top: 4px;
+}
+
 .Easy{
   background-color: #808000;
   color: #15ff25; 

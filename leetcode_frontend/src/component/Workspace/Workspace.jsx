@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Split from "react-split";
 import ProblemDescription from "./ProblemDescription/ProblemDescription";
 import Playground from "./Playground/Playground";
@@ -10,7 +10,7 @@ import useWindowSize from "../../hooks/useWindowSize";
 
 
 
-const Workspace = ({ problem , tcase}) => {
+const Workspace = ({ problem , tcase, signref}) => {
 	const { width, height } = useWindowSize();
 	const [success, setSuccess] = useState(false);
 	
@@ -19,7 +19,7 @@ const Workspace = ({ problem , tcase}) => {
 		<Split className='split' minSize={0}>
 			<ProblemDescription problem={problem}  />
 			<div className='bg-dark-fill-2'>
-				<Playground problem={problem} tcase={tcase} setSuccess={setSuccess}  />
+				<Playground problem={problem} tcase={tcase} setSuccess={setSuccess} signref={signref}  />
 				{success && <Confetti gravity={0.3} tweenDuration={4000} width={width - 1} height={height - 1} />}
 			</div>
 		</Split>
