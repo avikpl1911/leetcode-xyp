@@ -118,6 +118,7 @@ interface Question {
   title: string;
   titleSlug: string;
   topicTags: string[];
+  csrf: JSON
 }
 
 export interface DailyProblemData {

@@ -26,11 +26,12 @@ useEffect(()=>{
 (async ()=>{
       const kesp = await fetch("http://localhost:3000/select?titleSlug=two-sum")
       const resp = (await kesp.json())
-  const meta = (JSON.parse(resp.data.metaData))
+  const meta = (JSON.parse(resp.data.question.metaData))
   console.log(meta)
-  const tcase = resp.data.exampleTestcases.split("\n")
+  const tcase = resp.data.question.exampleTestcases.split("\n")
   setTcase(divideArray(tcase,meta))
-  setCon(resp.data)
+  setCon(resp.data.question)
+  localStorage.setItem("csrf",resp.data.question.csrf.csrftoken)
   if(kesp.ok){
     setLoading(false)
   }

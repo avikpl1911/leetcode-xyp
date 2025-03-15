@@ -1,7 +1,7 @@
 import {
   DailyProblemData,
   ProblemSetQuestionListData,
-  SelectProblemData,
+
 } from '../types';
 
 export const formatDailyData = (data: DailyProblemData) => ({
@@ -29,8 +29,8 @@ export const formatDailyData = (data: DailyProblemData) => ({
     data.activeDailyCodingChallengeQuestion.question.similarQuestions,
 });
 
-export const formatQuestionData = (data: SelectProblemData) => ({
-  data: data.question
+export const formatQuestionData = (data: any) => ({
+  data: data.data
 });
 
 export const formatProblemsData = (data: ProblemSetQuestionListData) => ({

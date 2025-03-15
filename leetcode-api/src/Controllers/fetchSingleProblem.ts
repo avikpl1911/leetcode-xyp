@@ -36,13 +36,13 @@ const fetchSingleProblem = async (
 
     
     var result = await response.json();
-    result["csrf"] = response.headers.getSetCookie()
+    result.data.question["csrf"] = parseCookie(response.headers.getSetCookie().toString())
 
     if (result.errors) {
       return res.send(result);
     }
 
-    return res.json(formatData(result.data));
+    return res.json(formatData(result));
   } catch (err) {
     console.error('Error: ', err);
     return res.send(err);
