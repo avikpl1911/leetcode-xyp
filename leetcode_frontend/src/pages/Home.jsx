@@ -29,7 +29,7 @@ return result;
 useEffect(()=>{
 (async ()=>{
   
-      const kesp = await fetch(`http://localhost:3000/select?titleSlug=${slug}`)
+      const kesp = await fetch(`https://leetcode-xyp.vercel.app/select?titleSlug=${slug}`)
       const resp = (await kesp.json())
   const meta = (JSON.parse(resp.data.question.metaData))
   console.log(meta)

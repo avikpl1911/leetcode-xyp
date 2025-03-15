@@ -49,7 +49,7 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 		
 	};
     const recurRunCheck = async (id)=>{
-        const resp = await axios.post(`http://localhost:3000/runcheck/${id}`,{
+        const resp = await axios.post(`https://leetcode-xyp.vercel.app/runcheck/${id}`,{
 			"csrf": sessionStorage.getItem("csrf"),
 			"session": localStorage.getItem("session"),		
 		  }) 
@@ -66,7 +66,7 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 	const handleRun = async ()=>{
 	   if(localStorage.getItem("session")){
 		setLod(true)
-		const resp = await axios.post(`http://localhost:3000/run/${slug}`,{
+		const resp = await axios.post(`https://leetcode-xyp.vercel.app/run/${slug}`,{
 			"csrf": sessionStorage.getItem("csrf"),
 			"session": localStorage.getItem("session"),
 			"data_input":problem.exampleTestcases,			
