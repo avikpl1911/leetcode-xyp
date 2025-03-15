@@ -22,7 +22,7 @@ const formatDailyData = (data) => ({
 });
 exports.formatDailyData = formatDailyData;
 const formatQuestionData = (data) => ({
-    data: data.question
+    data: data.data
 });
 exports.formatQuestionData = formatQuestionData;
 const formatProblemsData = (data) => ({

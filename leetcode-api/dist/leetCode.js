@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.submitCode = exports.checkSubmit = exports.languageStats = exports.trendingCategoryTopics = exports.problems = exports.selectProblem = exports.dailyProblem = exports.calendar = exports.acSubmission = exports.submission = exports.solvedProblem = exports.userContestHistory = exports.userContest = exports.userBadges = exports.userData = void 0;
+exports.runCheck = exports.run = exports.submitCode = exports.checkSubmit = exports.languageStats = exports.trendingCategoryTopics = exports.problems = exports.selectProblem = exports.dailyProblem = exports.calendar = exports.acSubmission = exports.submission = exports.solvedProblem = exports.userContestHistory = exports.userContest = exports.userBadges = exports.userData = void 0;
 const gqlQueries = __importStar(require("./GQLQueries"));
 const formatUtils = __importStar(require("./FormatUtils"));
 const controllers = __importStar(require("./Controllers"));
@@ -112,7 +112,6 @@ const languageStats = (_req, res) => {
 };
 exports.languageStats = languageStats;
 const checkSubmit = async (_req, res) => {
-    console.log(_req.body);
     const id = _req.params.id;
     const csrf = _req.body.csrf;
     const session = _req.body.session;
@@ -147,4 +146,42 @@ const submitCode = async (_req, res) => {
     }
 };
 exports.submitCode = submitCode;
+const run = async (_req, res) => {
+    const data_input = _req.body.data_input;
+    console.log(data_input);
+    const slug = _req.params.slug;
+    const question_id = _req.body.question_id;
+    const csrf = _req.body.csrf;
+    const session = _req.body.session;
+    const typed_code = _req.body.typed_code;
+    const lang = _req.body.lang;
+    if (question_id && csrf && session && typed_code && lang) {
+        const resp = await controllers.SendPostHttp(`https://leetcode.com/problems/${slug}/interpret_solution/`, { data_input, lang, question_id, typed_code }, { "x-csrftoken": csrf, Referer: `https://leetcode.com/problems/${slug}/description/`, Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` });
+        res.json(resp);
+    }
+    else {
+        res.status(400).json({
+            error: 'Missing or invalid query parameters',
+            solution: 'put csrf, loginsession & submisson id',
+        });
+    }
+};
+exports.run = run;
+const runCheck = async (_req, res) => {
+    const id = _req.params.id;
+    const csrf = _req.body.csrf;
+    const session = _req.body.session;
+    if (id && csrf && session) {
+        const resp = await controllers.sendHttpGetJson(`
+https://leetcode.com/submissions/detail/${id}/check/`, { Referer: "https://leetcode.com/", Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` });
+        res.json(resp);
+    }
+    else {
+        res.status(400).json({
+            error: 'Missing or invalid query parameters',
+            solution: 'put csrf, loginsession & submisson id',
+        });
+    }
+};
+exports.runCheck = runCheck;
 //# sourceMappingURL=leetCode.js.map

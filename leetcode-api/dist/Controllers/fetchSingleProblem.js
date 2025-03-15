@@ -18,11 +18,11 @@ const fetchSingleProblem = async (res, formatData, query, titleSlug) => {
         });
         console.log((0, utils_1.parseCookie)(response.headers.getSetCookie().toString()));
         var result = await response.json();
-        result["csrf"] = (0, utils_1.parseCookie)(response.headers.getSetCookie().toString());
+        result.data.question["csrf"] = (0, utils_1.parseCookie)(response.headers.getSetCookie().toString());
         if (result.errors) {
             return res.send(result);
         }
-        return res.json(formatData(result.data));
+        return res.json(formatData(result));
     }
     catch (err) {
         console.error('Error: ', err);
