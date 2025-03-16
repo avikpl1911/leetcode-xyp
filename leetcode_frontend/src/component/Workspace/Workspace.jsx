@@ -13,14 +13,17 @@ import useWindowSize from "../../hooks/useWindowSize";
 const Workspace = ({ problem , tcase, signref}) => {
 	const { width, height } = useWindowSize();
 	const [success, setSuccess] = useState(false);
-	
+    
+	const handleSubmit = ()=>{
+		console.log("hi im here")
+	} 
 
 	return (
 		<Split className='split' minSize={0}>
 			<ProblemDescription problem={problem}  />
 			<div className='bg-dark-fill-2'>
-				<Playground problem={problem} tcase={tcase} setSuccess={setSuccess} signref={signref}  />
-				{success && <Confetti gravity={0.3} tweenDuration={4000} width={width - 1} height={height - 1} />}
+				<Playground problem={problem} tcase={tcase} setSuccess={setSuccess} signref={signref} handleSubmit={handleSubmit} />
+				{success && <Confetti gravity={0.3} tweenDuration={4000} width={width - 1} height={height - 1} onAnimationEnd={()=>{console.log("hello")}}/>}
 			</div>
 		</Split>
 	);

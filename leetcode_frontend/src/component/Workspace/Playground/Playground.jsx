@@ -21,7 +21,7 @@ import axios from "axios";
 
 
 
-const Playground = ({ problem, setSuccess, tcase }) => {
+const Playground = ({ problem, setSuccess, tcase, handleSubmit }) => {
 	const [activeTestCaseId, setActiveTestCaseId] = useState(0);
 	const [Lang,setLang] = useState(localStorage.getItem("codeLang")?localStorage.getItem("codeLang"):"javascript")
     const {slug} = useParams()
@@ -45,9 +45,9 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 		pid
 	} = useParams();
 
-	const handleSubmit = async () => {
+	// const handleSubmit = async () => {
 		
-	};
+	// };
     const recurRunCheck = async (id)=>{
         const resp = await axios.post(`https://leetcode-xyp.vercel.app/runcheck/${id}`,{
 			"csrf": sessionStorage.getItem("csrf"),
@@ -59,10 +59,16 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 			recurRunCheck(id)
 		  }else{
 			setLod(false)
-			console.log(JSON.parse(resp.data).compare_result[0]=="1")
+			//console.log(JSON.parse(resp.data).compare_result[0]=="1")
 			setRunData(JSON.parse(resp.data))
 		  }
 	}
+    
+	useEffect(()=>{
+		console.log(runData)
+	},[runData])
+
+
 	const handleRun = async ()=>{
 	   if(localStorage.getItem("session")){
 		setLod(true)
@@ -88,7 +94,7 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 		console.log(problem.codeSnippets.filter(x => x.langSlug===e.target.value)[0].code)
 		setCode(problem.codeSnippets.filter(x => x.langSlug===e.target.value)[0].code)
 		localStorage.setItem("codeLang",e.target.value)
-		localStorage.setItem(`code-x`,problem.codeSnippets.filter(x => x.langSlug===e.target.value)[0].code);
+		localStorage.setItem(`code-${slug}`,problem.codeSnippets.filter(x => x.langSlug===e.target.value)[0].code);
 	}
     
     const extensions = React.useMemo(() => {
@@ -108,7 +114,7 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 
 
 	useEffect(() => {
-		const code = localStorage.getItem(`code-x`);
+		const code = localStorage.getItem(`code-${slug}`);
 		const lang = localStorage.getItem(`codeLang`)
 
 		if(lang){
@@ -128,7 +134,7 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 	const onChange = (e) => {
 		console.log(e)
 		setCode(e);
-		localStorage.setItem(`code-x`,e);
+		localStorage.setItem(`code-${slug}`,e);
 	};
 
 	return (
@@ -161,7 +167,7 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 						</div>
 						{lod && <CircleLoader/>}
 					</div>
-                    {runData.correct_answer != null && 
+                    {runData.correct_answer != null && !(runData.status_msg=="Runtime Error") &&
 					<div className="flex flex-row">
 					{runData.correct_answer ? <p  style={{paddingLeft:"10px",paddingTop:"10px",fontSize:"30px",color:"green"}}>Accepted</p> : 
 					
@@ -176,6 +182,28 @@ const Playground = ({ problem, setSuccess, tcase }) => {
 					</div>
 					}
                     
+					
+                   
+				    {runData.status_msg=="Time Limit Exceeded" && <p  style={{paddingLeft:"10px",paddingTop:"10px",fontSize:"30px",color:"red"}}>Time Limit Exceeded</p>}
+					{runData.status_msg=="Compile Error" && 
+					<>
+					<p  style={{paddingLeft:"10px",paddingTop:"10px",fontSize:"30px",color:"red"}}>Compile Error</p>
+
+					<div className='cursor-text rounded-lg border px-3 py-[10px] border-transparent  mt-2 ' style={{padding:"7px",marginLeft:"8px",marginRight:"8px",backgroundColor:"rgba(242, 77, 77, 0.46)",color:"red" }} >
+								{runData.full_compile_error}
+					</div>
+					
+					</>}
+
+                    {runData.status_msg=="Runtime Error" && 
+					<>
+					<p  style={{paddingLeft:"10px",paddingTop:"10px",fontSize:"30px",color:"red"}}>Compile Error</p>
+
+					<div className='cursor-text rounded-lg border px-3 py-[10px] border-transparent  mt-2 ' style={{padding:"7px",marginLeft:"8px",marginRight:"8px",backgroundColor:"rgba(242, 77, 77, 0.46)",color:"red" }} >
+								{runData.runtime_error}
+					</div>
+					
+					</>}
 
 
 					<div className='flex'>
