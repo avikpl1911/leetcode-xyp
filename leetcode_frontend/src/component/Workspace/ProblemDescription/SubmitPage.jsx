@@ -25,7 +25,7 @@ function SubmitPage({ loader, subData }) {
 
     if (loader) {
         return (
-            <div className='skeleton h-full w-full' >SubmitPage</div>
+            <div className='skeleton h-full w-full' ></div>
         )
     } else {
         return (
