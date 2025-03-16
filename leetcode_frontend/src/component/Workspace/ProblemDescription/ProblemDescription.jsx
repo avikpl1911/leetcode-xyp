@@ -13,7 +13,7 @@ import SubmitPage from "./SubmitPage";
 
 
 
-const ProblemDescription = ({ problem ,page,setPage,submit}) => {
+const ProblemDescription = ({ problem ,page,setPage,submit ,loader,subData}) => {
 	
     
     
@@ -58,7 +58,7 @@ const ProblemDescription = ({ problem ,page,setPage,submit}) => {
 				
 			</div>
             {page==1 && <DescPage problem = {problem} />}
-			{submit && page==2 && <SubmitPage loader={false}/>}
+			{submit && page==2 && <SubmitPage loader={loader} subData={subData}/>}
 			
 		</div>
 	);

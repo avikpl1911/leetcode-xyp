@@ -21,7 +21,7 @@ import axios from "axios";
 
 
 
-const Playground = ({ problem, setSuccess, tcase, handleSubmit ,setCode,code,setLang,Lang}) => {
+const Playground = ({ problem, setSuccess, tcase, handleSubmit ,setCode,code,setLang,Lang,subData}) => {
 	const [activeTestCaseId, setActiveTestCaseId] = useState(0);
 	
     const {slug} = useParams()

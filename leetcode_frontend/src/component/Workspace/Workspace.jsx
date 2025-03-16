@@ -19,6 +19,8 @@ const Workspace = ({ problem , tcase, signref}) => {
 	const [submit,setSubmit] = useState(false)
 	const [code,setCode] = useState("")
 	const [Lang,setLang] = useState(localStorage.getItem("codeLang")?localStorage.getItem("codeLang"):"javascript")
+	const [subData,setsubData] = useState({})
+	const [loader,setLoader] = useState(true)
 	 const {slug} = useParams()
 
     const recurSubmit = async (id)=>{
@@ -27,18 +29,28 @@ const Workspace = ({ problem , tcase, signref}) => {
 			"session": localStorage.getItem("session"),		
 		  }) 
     
-		  console.log(JSON.parse(resp.data))
+		  //console.log(JSON.parse(resp.data))
 		  if(resp.status==200 && JSON.parse(resp.data).state !== "SUCCESS"){
 			recurSubmit(id)
 		  }else{
 			//setLod(false)
 			//console.log(JSON.parse(resp.data).compare_result[0]=="1")
 			// setRunData(JSON.parse(resp.data))
-            
+            const kesp = await axios.post(`https://leetcode-xyp.vercel.app/subdetails/${id}`,{
+				"csrf": sessionStorage.getItem("csrf"),
+				"session": localStorage.getItem("session"),		
+			  })
+			
+			setsubData({check : JSON.parse(resp.data) ,details : JSON.parse(kesp.data).data.submissionDetails})
+			console.log({check : JSON.parse(resp.data) ,details : JSON.parse(kesp.data).data.submissionDetails})
+			setLoader(false)
 		  }
 	}
 
 	const handleSubmit = async ()=>{
+		setLoader(true)
+		setSubmit(true)
+		setPage(2)
 		const resp = await axios.post(`https://leetcode-xyp.vercel.app/submitques/${slug}`,{
 			"csrf": sessionStorage.getItem("csrf"),
 			"session": localStorage.getItem("session"),
@@ -53,9 +65,13 @@ const Workspace = ({ problem , tcase, signref}) => {
 
 	return (
 		<Split className='split' minSize={0}>
-			<ProblemDescription problem={problem} page={page} setPage={setPage} submit={true}  />
+			<ProblemDescription problem={problem} page={page} setPage={setPage} submit={submit} loader={loader} subData={subData}  />
 			<div className='bg-dark-fill-2'>
-				<Playground problem={problem} tcase={tcase} setSuccess={setSuccess} signref={signref} handleSubmit={handleSubmit} code={code} setCode={setCode} Lang={Lang} setLang={setLang}/>
+				<Playground problem={problem} tcase={tcase} setSuccess={setSuccess} 
+				signref={signref} handleSubmit={handleSubmit} 
+				code={code} setCode={setCode} Lang={Lang} setLang={setLang}
+				subData={subData}
+				/>
 				{success && <Confetti gravity={0.3} tweenDuration={4000} width={width - 1} height={height - 1} onAnimationEnd={()=>{console.log("hello")}}/>}
 			</div>
 		</Split>
