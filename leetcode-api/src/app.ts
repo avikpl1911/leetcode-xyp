@@ -162,6 +162,7 @@ app.post('/submit/:id',leetcode.checkSubmit)
 app.post('/submitques/:slug',leetcode.submitCode)
 app.post('/run/:slug',leetcode.run)
 app.post('/runcheck/:id',leetcode.runCheck)
+app.post('/subdetails/:id',leetcode.subdetails)
 app.get('/userProfile/:id', async (req, res) => {
   const user = req.params.id;
 

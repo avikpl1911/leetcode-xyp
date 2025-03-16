@@ -21,9 +21,9 @@ import axios from "axios";
 
 
 
-const Playground = ({ problem, setSuccess, tcase, handleSubmit }) => {
+const Playground = ({ problem, setSuccess, tcase, handleSubmit ,setCode,code,setLang,Lang}) => {
 	const [activeTestCaseId, setActiveTestCaseId] = useState(0);
-	const [Lang,setLang] = useState(localStorage.getItem("codeLang")?localStorage.getItem("codeLang"):"javascript")
+	
     const {slug} = useParams()
 	const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
     const [lod , setLod] = useState(false)
@@ -35,15 +35,11 @@ const Playground = ({ problem, setSuccess, tcase, handleSubmit }) => {
 
 	const [runData,setRunData] = useState({})
 
-	const [code,setCode] = useState("")
+	// const [code,setCode] = useState("")
 
 
 	const ref = useRef(null)
-    console.log(problem)
-	const [user] = [{}];
-	const {
-		pid
-	} = useParams();
+
 
 	// const handleSubmit = async () => {
 		

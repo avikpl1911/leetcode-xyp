@@ -5,3 +5,4 @@ export { default as fetchTrendingTopics } from './fetchDiscussion';
 export { default as fetchDataRawFormat } from './fetchDataRawFormat';
 export { default as sendHttpGetJson } from './sendGetHttpreq';
 export { default as SendPostHttp} from './SendPostHttp'
+export {default as fetchDataSubDetails} from './fetchDataSubDetails'

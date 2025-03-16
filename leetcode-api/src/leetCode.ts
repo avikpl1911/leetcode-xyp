@@ -206,6 +206,26 @@ export const submitCode = async (_req: Request, res: Response) => {
 
 }
 
+export const subdetails = async (_req: Request, res: Response) => {
+  const id = _req.params.id;
+  const csrf = _req.body.csrf;
+  const session = _req.body.session;
+  if (csrf && session && id) {
+    const resp = await controllers.SendPostHttp(`https://leetcode.com/graphql/`, {
+      operationName : "submissionDetails",
+      query: gqlQueries.SubDetails,
+      variables : {submissionId: id}
+
+      }, { "x-csrftoken": csrf, Referer: `https://leetcode.com/`, Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
+    res.json(resp)
+  } else {
+    res.status(400).json({
+      error: 'Missing or invalid query parameters',
+      solution: 'put csrf, loginsession & submisson id',
+    });
+  }
+}
+
 export const run = async (_req: Request, res: Response) => {
   const data_input = _req.body.data_input
   console.log(data_input)
@@ -216,7 +236,7 @@ export const run = async (_req: Request, res: Response) => {
   const typed_code = _req.body.typed_code;
   const lang = _req.body.lang;
   if (question_id && csrf && session && typed_code && lang) {
-    const resp = await controllers.SendPostHttp(`https://leetcode.com/problems/${slug}/interpret_solution/`, { data_input ,lang, question_id, typed_code }, { "x-csrftoken": csrf, Referer: `https://leetcode.com/problems/${slug}/description/`, Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
+    const resp = await controllers.SendPostHttp(`https://leetcode.com/problems/${slug}/interpret_solution/`, { data_input, lang, question_id, typed_code }, { "x-csrftoken": csrf, Referer: `https://leetcode.com/problems/${slug}/description/`, Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
     res.json(resp)
   } else {
     res.status(400).json({
@@ -231,8 +251,8 @@ export const runCheck = async (_req: Request, res: Response) => {
   const csrf = _req.body.csrf;
   const session = _req.body.session
   if (id && csrf && session) {
-    const resp = await 
-    controllers.sendHttpGetJson(`
+    const resp = await
+      controllers.sendHttpGetJson(`
 https://leetcode.com/submissions/detail/${id}/check/`, { Referer: "https://leetcode.com/", Cookie: `csrftoken=${csrf}; LEETCODE_SESSION=${session}` })
     res.json(resp)
   } else {

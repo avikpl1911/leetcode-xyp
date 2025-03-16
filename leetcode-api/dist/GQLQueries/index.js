@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.languageStatsQuery = exports.trendingDiscussQuery = exports.submissionQuery = exports.selectProblemQuery = exports.userProfileQuery = exports.problemListQuery = exports.dailyProblemQuery = exports.contestQuery = exports.AcSubmissionQuery = void 0;
+exports.SubDetails = exports.languageStatsQuery = exports.trendingDiscussQuery = exports.submissionQuery = exports.selectProblemQuery = exports.userProfileQuery = exports.problemListQuery = exports.dailyProblemQuery = exports.contestQuery = exports.AcSubmissionQuery = void 0;
 var recentAcSubmit_1 = require("./recentAcSubmit");
 Object.defineProperty(exports, "AcSubmissionQuery", { enumerable: true, get: function () { return __importDefault(recentAcSubmit_1).default; } });
 var contest_1 = require("./contest");
@@ -22,4 +22,6 @@ var trendingDiscuss_1 = require("./trendingDiscuss");
 Object.defineProperty(exports, "trendingDiscussQuery", { enumerable: true, get: function () { return __importDefault(trendingDiscuss_1).default; } });
 var languageStats_1 = require("./languageStats");
 Object.defineProperty(exports, "languageStatsQuery", { enumerable: true, get: function () { return __importDefault(languageStats_1).default; } });
+var SubDetails_1 = require("./SubDetails");
+Object.defineProperty(exports, "SubDetails", { enumerable: true, get: function () { return __importDefault(SubDetails_1).default; } });
 //# sourceMappingURL=index.js.map

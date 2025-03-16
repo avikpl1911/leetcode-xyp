@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
-const fetchDataCustomOptions = async (
-    options: JSON,
+const fetchDataSubDetails = async (
+    SubId: String,
     res: Response,
     query: string
 ) => {
@@ -16,12 +16,13 @@ const fetchDataCustomOptions = async (
             body: JSON.stringify({
                 query: query,
                 variables: {
-                    options 
+                    submissionId : SubId 
                 },
             }),
         });
         
         const result = await response.json();
+        console.log(result)
         if (!response.ok) {
             console.error(`HTTP error! status: ${response.status}`);
         }
@@ -36,4 +37,4 @@ const fetchDataCustomOptions = async (
     }
 };
 
-export default fetchDataCustomOptions;
+export default fetchDataSubDetails;
