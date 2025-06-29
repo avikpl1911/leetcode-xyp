@@ -21,4 +21,6 @@
 <li>npm install on both given direcories</li>
 </ul><ul>
 <li>npm run dev on both directories simultaneously</li>
+</ul><ul>
+<li>for testing the proxy you can visit https://leetcode-xyp-client.vercel.app/&lt;questionn-slug&gt; example https://leetcode-xyp-client.vercel.app/two-sum</li>
 </ul>
